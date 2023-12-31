@@ -84,13 +84,23 @@ class CheckoutController extends Controller
         $extras = [];
         $pizzaPrice = [];
         $extraPrices = [];
+        $pizzaQuantities = [];
 
         foreach ($orderItems as $orderItem) {
 
             $pizzas[] = $orderItem->pizzas; 
             $pizzaPrice[] = $orderItem->pizzas->price * $orderItem->quantity ; 
+
+            $pizzaId = $orderItem->pizzas->id;
+
+            if (array_key_exists($pizzaId, $pizzaQuantities)) {
+                $pizzaQuantities[$pizzaId] += $orderItem->quantity;
+            } else {
+                $pizzaQuantities[$pizzaId] = $orderItem->quantity;
+            }
+    
             $extras[] = $orderItem->extras;
-            
+
             $extrasForOrder = $orderItem->extras;
             foreach ($extrasForOrder as $extra) {
                 if (isset($extra->price)) {
@@ -112,6 +122,7 @@ class CheckoutController extends Controller
         return view('pizzaplaza.success', [
             'order' => $order,
             'pizzas' => $pizzas,
+            'quantity' => $pizzaQuantities,
             'extras' => $extras,
             'shippingInfo' => $shippingInfo,
             'orderID' => $orderID,

@@ -7,12 +7,11 @@
         <p>Thank you for your order. Here are the details:</p>
         
         <ul>
-
             @foreach($pizzas as $index => $pizza)
                 <li>
                     @if($pizza)
                         <strong>Item:</strong> {{ $pizza->name }}<br>
-                        {{-- <strong>Quantity:</strong> {{ $quantity }}<br> --}}
+                        <strong>Quantity:</strong> {{ $quantity[$pizza->id] ?? 0 }}<br>
                         <strong>Price per item:</strong> €{{ $pizza->price }}<br>
                         @if($extras[$index]->isNotEmpty())
                             <strong>Extras:</strong><br>
